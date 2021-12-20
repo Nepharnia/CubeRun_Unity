@@ -8,10 +8,12 @@ public class GameScript : MonoBehaviour
     public GameObject Player;
     public Text scoreText;
     public GameOver gameOver;
+    public Text maxScoreText;
     Rigidbody2D player_rb;
     private int nbjump = 0;
     private int nbMaxJump = 2;
     private int score;
+    private int maxScore;
 
 
     void Awake()
@@ -25,6 +27,9 @@ public class GameScript : MonoBehaviour
     {
         player_rb = GetComponent<Rigidbody2D>();
         Player = GameObject.FindGameObjectWithTag("Player");
+        player_rb.mass = 0.6f;
+        player_rb.gravityScale = 1.4f;
+        score = 0;
 
     }
 
@@ -38,10 +43,17 @@ public class GameScript : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Space) && nbjump < nbMaxJump)
         {
-            float jumpVelocity = 8f;
+            float jumpVelocity = 13.5f;
             player_rb.velocity = Vector2.up * jumpVelocity;
             nbjump++;
         }
+
+        if(score > maxScore)
+        {
+            maxScore = score;
+        }
+
+        maxScoreText.text = (maxScore.ToString());
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -67,7 +79,6 @@ public class GameScript : MonoBehaviour
             Destroy(collision.gameObject);
             score += 100;
             scoreText.text = (score.ToString());
-
         }
 
     }
